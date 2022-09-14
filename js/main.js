@@ -1,6 +1,6 @@
 "use strict";
 var width = 500,
-  height = 400,
+  height = 500,
   cvs = document.createElement("canvas"),
   gl =
     cvs.getContext("webgl2") ||
