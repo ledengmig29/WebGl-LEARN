@@ -20,7 +20,7 @@ gl.clear(gl.COLOR_BUFFER_BIT);
 var vertexSource =
   "vec2 position=vec2(0.0); void main(){ gl_Position=vec4(position,0.0,1.0); gl_PointSize=30.0;}";
 
-//片元着色器
+//片元着色器 片元可以简单理解为是像素
 var fragmentSource = "void main(){gl_FragColor=vec4(1.0,0.0,0.0,1.0);}";
 
 //初始化頂點着色器
@@ -53,34 +53,34 @@ if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
   throw gl.getShaderInfoLog(program);
 }
 
-function draw(gl, n, u_ModelViewMatrix) {
-  //设置视角矩阵的相关信息（视点，视线，上方向）
-  var viewMatrix = new Matrix4();
-  viewMatrix.setLookAt(3, 3, 7, 0, 0, 0, 0, 1, 0);
+// function draw(gl, n, u_ModelViewMatrix) {
+//   //设置视角矩阵的相关信息（视点，视线，上方向）
+//   var viewMatrix = new Matrix4();
+//   viewMatrix.setLookAt(3, 3, 7, 0, 0, 0, 0, 1, 0);
 
-  //设置模型矩阵的相关信息
-  var modelMatrix = new Matrix4();
-  modelMatrix.setRotate(0, 0, 0, 1);
+//   //设置模型矩阵的相关信息
+//   var modelMatrix = new Matrix4();
+//   modelMatrix.setRotate(0, 0, 0, 1);
 
-  //设置透视投影矩阵
-  var projMatrix = new Matrix4();
-  projMatrix.setPerspective(30, canvas.width / canvas.height, 1, 100);
+//   //设置透视投影矩阵
+//   var projMatrix = new Matrix4();
+//   projMatrix.setPerspective(30, canvas.width / canvas.height, 1, 100);
 
-  //计算出模型视图矩阵 viewMatrix.multiply(modelMatrix)相当于在着色器里面u_ViewMatrix * u_ModelMatrix
-  var modeViewMatrix = projMatrix.multiply(viewMatrix.multiply(modelMatrix));
+//   //计算出模型视图矩阵 viewMatrix.multiply(modelMatrix)相当于在着色器里面u_ViewMatrix * u_ModelMatrix
+//   var modeViewMatrix = projMatrix.multiply(viewMatrix.multiply(modelMatrix));
 
-  //将试图矩阵传给u_ViewMatrix变量
-  gl.uniformMatrix4fv(u_ModelViewMatrix, false, modeViewMatrix.elements);
+//   //将试图矩阵传给u_ViewMatrix变量
+//   gl.uniformMatrix4fv(u_ModelViewMatrix, false, modeViewMatrix.elements);
 
-  //开启隐藏面清除
-  gl.enable(gl.DEPTH_TEST);
+//   //开启隐藏面清除
+//   gl.enable(gl.DEPTH_TEST);
 
-  //清空颜色和深度缓冲区
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+//   //清空颜色和深度缓冲区
+//   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  //绘制图形
-  gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_BYTE, 0);
-}
+//   //绘制图形
+//   gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_BYTE, 0);
+// }
 
 gl.useProgram(program);
 gl.drawArrays(gl.POINTS, 0, 1);
