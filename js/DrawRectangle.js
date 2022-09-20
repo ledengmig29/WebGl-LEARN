@@ -20,21 +20,39 @@ var program = initShader(gl, vertexShaderSource, fragShaderSource);
 var aposLocation = gl.getAttribLocation(program, "apos");
 
 //类型数组构造函数Float32Array创建顶点数组
-var data = new Float32Array([0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5]);
+//创建立方体的顶点坐标数据
+var data = new Float32Array([
+  //z为0.5时，xOy平面上的四个点坐标
+  0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5,
+  //z为-0.5时，xOy平面上的四个点坐标
+  0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5,
+  //上面两组坐标分别对应起来组成一一对
+  0.5, 0.5, 0.5, 0.5, 0.5, -0.5,
+
+  -0.5, 0.5, 0.5, -0.5, 0.5, -0.5,
+
+  -0.5, -0.5, 0.5, -0.5, -0.5, -0.5,
+
+  0.5, -0.5, 0.5, 0.5, -0.5, -0.5,
+]);
 
 //创建缓冲区对象
 var buffer = gl.createBuffer();
-//绑定缓冲区对象,激活buffer
+//绑定缓冲区对象
 gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 //顶点数组data数据传入缓冲区
 gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
 //缓冲区中的数据按照一定的规律传递给位置变量apos
-gl.vertexAttribPointer(aposLocation, 2, gl.FLOAT, false, 0, 0);
+gl.vertexAttribPointer(aposLocation, 3, gl.FLOAT, false, 0, 0);
 //允许数据传递
 gl.enableVertexAttribArray(aposLocation);
 
-//开始绘制图形
+//LINE_LOOP模式绘制前四个点
 gl.drawArrays(gl.LINE_LOOP, 0, 4);
+//LINE_LOOP模式从第五个点开始绘制四个点
+gl.drawArrays(gl.LINE_LOOP, 4, 4);
+//LINES模式绘制后8个点
+gl.drawArrays(gl.LINES, 8, 8);
 
 //声明初始化着色器函数
 function initShader(gl, vertexShaderSource, fragmentShaderSource) {
